@@ -1,0 +1,36 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "flutter: build linux",
+			"type": "shell",
+			"command": "flutter build linux",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": [
+				"$dart-err"
+			],
+			"detail": "Builds a release version of the Linux application."
+		},
+		{
+			"label": "flutter: clean",
+			"type": "shell",
+			"command": "flutter clean",
+			"group": "none",
+			"problemMatcher": [],
+			"detail": "Deletes the build/ and .dart_tool/ directories."
+		},
+		{
+			"label": "flutter: build web",
+			"type": "shell",
+			"command": "flutter build web",
+			"group": "build",
+			"problemMatcher": [
+				"$dart-err"
+			],
+			"detail": "Builds a web version using canvaskit."
+		}
+	]
+}

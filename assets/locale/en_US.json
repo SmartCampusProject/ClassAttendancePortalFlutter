@@ -1,0 +1,30 @@
+{
+  "common": {
+    "email": "Email",
+    "password": "Password",
+    "faculty": "Faculty"
+  },
+  "login": {
+    "app_title": "Class Attendance Portal",
+    "email_hint": "name@university.edu",
+    "password_hint": "••••••••",
+    "login": "Login",
+    "no_account_register": "Don't have an account? Register"
+  },
+  "register": {
+    "create_account": "Create An Account",
+    "account_type": "Account Type",
+    "select_role": "Select your role",
+    "full_name": "Full Name",
+    "full_name_hint": "John Doe",
+    "student_id": "Student ID",
+    "student_id_hint": "2302038",
+    "email_hint_register": "user@uni.edu",
+    "faculty_and_dept": "Faculty & Department",
+    "select_faculty": "Select Faculty",
+    "select_department": "Select Department",
+    "search": "Search...",
+    "signup": "Sign Up",
+    "already_have_account": "Already have an account? Login"
+  }
+}
