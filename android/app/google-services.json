@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1010840071708",
+    "project_id": "classattendanceportal",
+    "storage_bucket": "classattendanceportal.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010840071708:android:e7373eb01a03af4ea439d9",
+        "android_client_info": {
+          "package_name": "com.example.classattendanceportal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGFW8UC0ilwwR1NvpnmhYvVz1SEHFFd1k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,14 +1,12 @@
-enum UserRole { admin, teacher, student }
+enum UserRole {
+  admin("Admin"),
+  student("Student"),
+  teacher("Teacher");
 
-extension UserRoleExtension on UserRole {
-  String get name {
-    switch (this) {
-      case UserRole.admin:
-        return "Admin";
-      case UserRole.teacher:
-        return "Teacher";
-      case UserRole.student:
-        return "Student";
-    }
-  }
+  final String name;
+
+  const UserRole(this.name);
+
+  @override
+  String toString() => name;
 }
