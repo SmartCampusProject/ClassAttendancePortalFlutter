@@ -9,7 +9,8 @@
     "email_hint": "name@university.edu",
     "password_hint": "••••••••",
     "login": "লগইন",
-    "no_account_register": "অ্যাকাউন্ট নেই? নিবন্ধন করুন"
+    "no_account_register": "অ্যাকাউন্ট নেই? নিবন্ধন করুন",
+    "forgot_password_link": "পাসওয়ার্ড ভুলে গেছেন?"
   },
   "register": {
     "create_account": "একটি অ্যাকাউন্ট তৈরি করুন",
@@ -26,5 +27,25 @@
     "search": "অনুসন্ধান...",
     "signup": "নিবন্ধন করুন",
     "already_have_account": "ইতিমধ্যে একটি অ্যাকাউন্ট আছে? লগইন করুন"
+  },
+  "forgot_password": {
+    "title": "পাসওয়ার্ড ভুলে গেছেন",
+    "instruction": "পাসওয়ার্ড রিসেট লিঙ্ক পেতে আপনার ইমেল ঠিকানা লিখুন।",
+    "email_label": "ইমেল",
+    "email_hint": "আপনার ইমেল লিখুন",
+    "send_reset_link": "রিসেট লিঙ্ক পাঠান",
+    "success_message": "পাসওয়ার্ড রিসেট লিঙ্ক {email} এ পাঠানো হয়েছে",
+    "error_title": "ত্রুটি"
+  },
+  "verification": {
+    "title": "আপনার ইমেল যাচাই করুন",
+    "instruction": "আপনার ইমেল ঠিকানায় একটি যাচাইকরণ লিঙ্ক পাঠানো হয়েছে। আপনার ইনবক্স চেক করুন এবং আপনার নিবন্ধন সম্পূর্ণ করতে লিঙ্কটি অনুসরণ করুন।",
+    "back_to_login": "লগইন এ ফিরে যান"
+  },
+  "errors": {
+    "registration_failed_title": "নিবন্ধন ব্যর্থ হয়েছে",
+    "login_failed_title": "লগইন ব্যর্থ হয়েছে",
+    "unexpected_error": "একটি অপ্রত্যাশিত ত্রুটি ঘটেছে।",
+    "reset_password_failed_title": "পাসওয়ার্ড রিসেট ব্যর্থ হয়েছে"
   }
 }

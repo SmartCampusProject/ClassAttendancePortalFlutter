@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:classattendanceportal/routes.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../services/auth_service.dart'; // Import AuthService
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,6 +14,14 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<ShadFormState>();
+  final AuthService _auth = AuthService(); // Instance of AuthService
+  final ValueNotifier<String?> _errorMessage = ValueNotifier<String?>(null);
+
+  @override
+  void dispose() {
+    _errorMessage.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,19 +92,71 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 32),
-
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ShadButton.link(
+                        onPressed: () => Get.toNamed('/forgot-password'),
+                        child: Text("login.forgot_password_link".tr),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  ValueListenableBuilder<String?>(
+                    valueListenable: _errorMessage,
+                    builder: (context, error, child) {
+                      if (error == null) {
+                        return const SizedBox.shrink();
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: Text(
+                          error,
+                          style: theme.textTheme.small.copyWith(
+                            color: theme.colorScheme.destructive,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    },
+                  ),
                   ShadButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (formKey.currentState!.saveAndValidate()) {
-                        print(formKey.currentState!.value);
+                        final data = formKey.currentState!.value;
+                        final String email = data['email'];
+                        final String password = data['password'];
+
+                        try {
+                          final user = await _auth.signInWithEmailAndPassword(
+                            email,
+                            password,
+                          );
+                          if (user != null) {
+                            Get.offAllNamed('/home');
+                          }
+                        } on AuthException catch (e) {
+                          Get.snackbar(
+                            'errors.login_failed_title'.tr,
+                            e.message,
+                            backgroundColor: Colors.red,
+                            colorText: Colors.white,
+                          );
+                        } catch (e) {
+                          Get.snackbar(
+                            'errors.login_failed_title'.tr,
+                            'errors.unexpected_error'.tr,
+                            backgroundColor: Colors.red,
+                            colorText: Colors.white,
+                          );
+                        }
                       }
                     },
                     child: Text('login.login'.tr),
                   ),
                   const SizedBox(height: 16),
                   ShadButton.link(
-                    onPressed: () => Get.toNamed(ROUTE_REGISTER),
+                    onPressed: () => Get.toNamed('/register'),
                     child: Text("login.no_account_register".tr),
                   ),
                 ],

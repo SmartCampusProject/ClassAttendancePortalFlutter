@@ -3,9 +3,14 @@ import 'package:classattendanceportal/services/translation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(
+    url: "https://ehxqfohpuhmgksxfcdle.supabase.co",
+    anonKey: "sb_publishable_P1AjxOae_9L46lZKDJAjmw_5FQXOYSf",
+  );
   await TranslationService.init();
   runApp(const MyApp());
 }

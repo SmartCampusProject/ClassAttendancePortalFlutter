@@ -4,6 +4,8 @@ import 'package:classattendanceportal/enums/user_role.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../services/auth_service.dart'; // Import AuthService
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -16,13 +18,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final formKey = GlobalKey<ShadFormState>();
   UserRole? selectedRole;
   String deptSearch = '';
+  final AuthService _auth = AuthService(); // Instance of AuthService
+  final ValueNotifier<String?> _errorMessage = ValueNotifier<String?>(null);
+
+  @override
+  void dispose() {
+    _errorMessage.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = ShadTheme.of(context);
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.muted,
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 40),
@@ -33,6 +43,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               color: theme.colorScheme.card,
               borderRadius: theme.radius,
               border: Border.all(color: theme.colorScheme.border),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
             ),
             child: ShadForm(
               key: formKey,
@@ -136,8 +153,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         options: Department.values
                             .where(
                               (d) => d.name.toLowerCase().contains(
-                                    deptSearch.toLowerCase(),
-                                  ),
+                                deptSearch.toLowerCase(),
+                              ),
                             )
                             .map(
                               (d) => ShadOption(value: d, child: Text(d.name)),
@@ -150,19 +167,62 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
 
                   const SizedBox(height: 32),
+                  ValueListenableBuilder<String?>(
+                    valueListenable: _errorMessage,
+                    builder: (context, error, child) {
+                      if (error == null) {
+                        return const SizedBox.shrink();
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: Text(
+                          error,
+                          style: theme.textTheme.small.copyWith(
+                            color: theme.colorScheme.destructive,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    },
+                  ),
 
                   ShadButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (formKey.currentState!.saveAndValidate()) {
-                        print(
-                          'Registration Data: ${formKey.currentState!.value}',
-                        );
+                        final data = formKey.currentState!.value;
+                        final String email = data['email'];
+                        final String password = data['password'];
+
+                        try {
+                          final user = await _auth.registerWithEmailAndPassword(
+                            email,
+                            password,
+                            data,
+                          );
+                          if (user != null) {
+                            Get.offAllNamed('/verification');
+                          }
+                        } on AuthException catch (e) {
+                          Get.snackbar(
+                            'errors.registration_failed_title'.tr,
+                            e.message,
+                            backgroundColor: Colors.red,
+                            colorText: Colors.white,
+                          );
+                        } catch (e) {
+                          Get.snackbar(
+                            'errors.registration_failed_title'.tr,
+                            'errors.unexpected_error'.tr,
+                            backgroundColor: Colors.red,
+                            colorText: Colors.white,
+                          );
+                        }
                       }
                     },
                     child: Text('register.signup'.tr),
                   ),
                   ShadButton.link(
-                    onPressed: () => Get.back(),
+                    onPressed: () => Get.toNamed('/login'),
                     child: Text('register.already_have_account'.tr),
                   ),
                 ],
