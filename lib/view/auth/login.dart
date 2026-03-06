@@ -1,9 +1,10 @@
+import 'package:classattendanceportal/enums/user_role.dart';
+import 'package:classattendanceportal/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:classattendanceportal/routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../services/auth_service.dart'; // Import AuthService
+import '../../services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,7 +15,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<ShadFormState>();
-  final AuthService _auth = AuthService(); // Instance of AuthService
+  final AuthService _auth = AuthService();
   final ValueNotifier<String?> _errorMessage = ValueNotifier<String?>(null);
 
   @override
@@ -132,8 +133,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             email,
                             password,
                           );
+
                           if (user != null) {
-                            Get.offAllNamed('/home');
+                            UserRole role = await _auth.getProfileRole(user);
+                            if (role == UserRole.admin) {
+                              Get.offAllNamed(ROUTE_ADMIN);
+                            } else if (role == UserRole.teacher) {
+                              Get.offAllNamed(ROUTE_TEACHER);
+                            } else {
+                              Get.offAllNamed(ROUTE_STUDENT);
+                            }
                           }
                         } on AuthException catch (e) {
                           Get.snackbar(

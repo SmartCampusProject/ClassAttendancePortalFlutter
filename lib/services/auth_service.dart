@@ -1,12 +1,15 @@
+import 'package:classattendanceportal/enums/user_role.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthService {
   final GoTrueClient _supabaseAuth = Supabase.instance.client.auth;
   final SupabaseClient _supabaseClient = Supabase.instance.client;
 
-  // Register with email and password
   Future<User?> registerWithEmailAndPassword(
-      String email, String password, Map<String, dynamic> data) async {
+    String email,
+    String password,
+    Map<String, dynamic> data,
+  ) async {
     try {
       final AuthResponse res = await _supabaseAuth.signUp(
         email: email,
@@ -23,7 +26,25 @@ class AuthService {
     }
   }
 
-  // Create user profile
+  Future<UserRole> getProfileRole(User user) async {
+    try {
+      final data = await _supabaseClient
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+
+      final roleString = data['role'] as String?;
+      return UserRole.values.firstWhere(
+        (role) => role.name.toLowerCase() == roleString?.toLowerCase(),
+        orElse: () => UserRole.student,
+      );
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
   Future<void> _createProfile(User user, Map<String, dynamic> data) async {
     try {
       await _supabaseClient.from('profiles').insert({
@@ -41,8 +62,10 @@ class AuthService {
     }
   }
 
-  // Sign in with email and password
-  Future<User?> signInWithEmailAndPassword(String email, String password) async {
+  Future<User?> signInWithEmailAndPassword(
+    String email,
+    String password,
+  ) async {
     try {
       final AuthResponse res = await _supabaseAuth.signInWithPassword(
         email: email,
@@ -55,17 +78,14 @@ class AuthService {
     }
   }
 
-  // Sign out
   Future<void> signOut() async {
     await _supabaseAuth.signOut();
   }
 
-  // Get current user
   User? getCurrentUser() {
     return _supabaseAuth.currentUser;
   }
 
-  // Send password reset email
   Future<void> sendPasswordResetEmail(String email) async {
     try {
       await _supabaseAuth.resetPasswordForEmail(email);
@@ -75,9 +95,9 @@ class AuthService {
     }
   }
 
-  // Stream of authentication changes
   Stream<User?> get user {
-    return _supabaseAuth.onAuthStateChange
-        .map((authState) => authState.session?.user);
+    return _supabaseAuth.onAuthStateChange.map(
+      (authState) => authState.session?.user,
+    );
   }
 }

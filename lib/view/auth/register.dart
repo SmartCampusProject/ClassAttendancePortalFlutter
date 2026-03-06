@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../services/auth_service.dart'; // Import AuthService
+import '../../services/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -18,7 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final formKey = GlobalKey<ShadFormState>();
   UserRole? selectedRole;
   String deptSearch = '';
-  final AuthService _auth = AuthService(); // Instance of AuthService
+  final AuthService _auth = AuthService();
   final ValueNotifier<String?> _errorMessage = ValueNotifier<String?>(null);
 
   @override
