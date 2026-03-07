@@ -1,5 +1,6 @@
 import 'package:classattendanceportal/controllers/admin.dart';
 import 'package:classattendanceportal/view/components/navrail.dart';
+import 'package:classattendanceportal/view/components/responsielayout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
@@ -33,44 +34,21 @@ class AdminScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveBuilder(
-      builder: (context, info) {
-        return Scaffold(
-          appBar: info.isMobile ? AppBar(title: const Text("Admin")) : null,
-          body: Row(
-            children: [
-              if (info.isTablet || info.isDesktop)
-                ShadSidebar(
-                  isExtended: info.isDesktop,
-                  headerText: "ADMIN",
-                  headerIcon: LucideIcons.shieldCheck,
-                  currentIndex: controller.selectedIndex,
-                  onItemSelected: controller.changeIndex,
-                  onLogout: () => print("Logout tapped"),
-                  items: navItems,
-                ),
-
-              Flexible(
-                child: Obx(
-                  () => Center(
-                    child: Text(
-                      'Page: ${controller.selectedIndex.value}',
-                      style: ShadTheme.of(context).textTheme.h3,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+    return ResponsiveLayout(
+      title: "ADMIN",
+      headerIcon: LucideIcons.shieldCheck,
+      navItems: navItems,
+      currentIndex: controller.selectedIndex,
+      onItemSelected: controller.changeIndex,
+      onLogout: () => print("Logging out..."),
+      child: Obx(
+        () => Center(
+          child: Text(
+            'Current View: ${navItems[controller.selectedIndex.value].label}',
+            style: ShadTheme.of(context).textTheme.h3,
           ),
-          bottomNavigationBar: info.isMobile
-              ? ShadBottomBar(
-                  items: navItems,
-                  currentIndex: controller.selectedIndex,
-                  onItemSelected: controller.changeIndex,
-                )
-              : null,
-        );
-      },
+        ),
+      ),
     );
   }
 }

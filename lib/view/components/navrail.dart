@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class SidebarItemModel {
@@ -40,8 +41,7 @@ class ShadSidebar extends StatelessWidget {
 
     final double sidebarWidth = isExtended ? 240 : 80;
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
+    return Container(
       width: sidebarWidth,
       height: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
@@ -296,21 +296,27 @@ class ShadBottomBar extends StatelessWidget {
     bool isSelected,
     Color color,
   ) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(item.icon, size: 20, color: color),
-        const SizedBox(height: 4),
-        Text(
-          item.label,
-          style: TextStyle(
-            fontSize: 10, // Slightly smaller for vertical layout
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-            color: color,
-          ),
-        ),
-      ],
+    return ResponsiveBuilder(
+      builder: (context, info) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(item.icon, size: 20, color: color),
+            if (info.isMobile) ...[
+              const SizedBox(height: 4),
+              Text(
+                item.label,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                  color: color,
+                ),
+              ),
+            ],
+          ],
+        );
+      },
     );
   }
 }
