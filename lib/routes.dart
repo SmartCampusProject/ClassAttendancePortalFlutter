@@ -1,3 +1,4 @@
+import 'package:classattendanceportal/bindings/admin.dart';
 import 'package:classattendanceportal/view/admin.dart';
 import 'package:classattendanceportal/view/auth/forgot_password.dart';
 import 'package:classattendanceportal/view/auth/login.dart';
@@ -41,7 +42,8 @@ class AppRouter {
       ),
       GetPage(
         name: ROUTE_ADMIN,
-        page: () => const AdminScreen(),
+        page: () => AdminScreen(),
+        binding: AdminBinding(),
         transition: Transition.noTransition,
       ),
       GetPage(

@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       translations: TranslationService(),
       debugShowCheckedModeBanner: false,
       title: 'Class Attendance Portal',
-      theme: ThemeData.dark(),
+      theme: ThemeData.light(),
       builder: (context, child) {
         return ShadTheme(
           data: ShadThemeData(
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           child: child!,
         );
       },
-      initialRoute: '/login',
+      initialRoute: ROUTE_ADMIN,
       getPages: AppRouter.routes(),
     );
   }
