@@ -12,6 +12,25 @@ class AdminScreen extends StatelessWidget {
 
   final AdminController controller = Get.find<AdminController>();
 
+  final List<SidebarItemModel> navItems = [
+    SidebarItemModel(icon: LucideIcons.bookOpen, label: "Courses", index: 0),
+    SidebarItemModel(
+      icon: LucideIcons.graduationCap,
+      label: "Students",
+      index: 1,
+    ),
+    SidebarItemModel(
+      icon: LucideIcons.presentation,
+      label: "Teachers",
+      index: 2,
+    ),
+    SidebarItemModel(
+      icon: LucideIcons.calendarDays,
+      label: "Semesters",
+      index: 3,
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
@@ -20,12 +39,18 @@ class AdminScreen extends StatelessWidget {
           appBar: info.isMobile ? AppBar(title: const Text("Admin")) : null,
           body: Row(
             children: [
-              // Use the separated widget here
               if (info.isTablet || info.isDesktop)
-                ShadSidebar(isExtended: info.isDesktop),
+                ShadSidebar(
+                  isExtended: info.isDesktop,
+                  headerText: "ADMIN",
+                  headerIcon: LucideIcons.shieldCheck,
+                  currentIndex: controller.selectedIndex,
+                  onItemSelected: controller.changeIndex,
+                  onLogout: () => print("Logout tapped"),
+                  items: navItems,
+                ),
 
-              // Content Area
-              Expanded(
+              Flexible(
                 child: Obx(
                   () => Center(
                     child: Text(
@@ -37,26 +62,15 @@ class AdminScreen extends StatelessWidget {
               ),
             ],
           ),
-          bottomNavigationBar: info.isMobile ? _buildBottomNav() : null,
+          bottomNavigationBar: info.isMobile
+              ? ShadBottomBar(
+                  items: navItems,
+                  currentIndex: controller.selectedIndex,
+                  onItemSelected: controller.changeIndex,
+                )
+              : null,
         );
       },
-    );
-  }
-
-  Widget _buildBottomNav() {
-    return Obx(
-      () => BottomNavigationBar(
-        currentIndex: controller.selectedIndex.value,
-        onTap: controller.changeIndex,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Dash'),
-          BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Users'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-      ),
     );
   }
 }
